@@ -12,14 +12,17 @@ COMPILER_FLAGS = \
 
 # Define directories containing headers to include.
 INCLUDE_PATHS = \
+	-I/usr/local/include/ \
 	-I./include \
 	-I./template
 
 # Define directories containing libraries to include.
 LIBRARY_PATHS = \
+	-L/usr/local/lib
 
 # Define libraries to link into the executable.
 LINKER_FLAGS = \
+	-lSDL2
 
 # Define source files.
 SOURCE_FILES = \
