@@ -18,10 +18,10 @@ namespace HTP
     auto task = std::make_shared<std::packaged_task<typename std::result_of<F(Args...)>::type()>>(binding);
     auto future = task->get_future();
 
-    LockMutex();
+    m_Mutex.Lock();
     m_Tasks.Push([task]() { (*task)(); });
-    SignalCondition();
-    UnlockMutex();
+    m_Condition.Signal();
+    m_Mutex.Unlock();
 
     return future;
   }

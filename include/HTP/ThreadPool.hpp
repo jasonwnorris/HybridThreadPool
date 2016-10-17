@@ -15,7 +15,7 @@
 
 namespace HTP
 {
-  class ThreadPool : public ThreadSafe
+  class ThreadPool
   {
     public:
       static int ThreadWorker(void* p_Data);
@@ -30,9 +30,11 @@ namespace HTP
       template<class F, class... Args> std::future<typename std::result_of<F(Args...)>::type> Start(F&& p_Function, Args&&... p_Arguments);
 
     private:
-      std::function<void()> NextTask();
+      void Process(unsigned long p_ThreadID);
 
     private:
+      Mutex m_Mutex;
+      Condition m_Condition;
       bool m_IsStopped;
       int m_ThreadCount;
       std::vector<SDL_Thread*> m_Threads;

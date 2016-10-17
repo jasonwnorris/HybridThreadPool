@@ -9,43 +9,13 @@ namespace HTP
   {
     const unsigned long id = SDL_GetThreadID(nullptr);
 
-    SDL_Log("[Thread #%lu] Starting...", id);
-
     ThreadPool* pool = static_cast<ThreadPool*>(p_Data);
-    bool assigned = false;
-
-    while (!pool->IsStopped())
-    {
-      std::function<void()> task;
-
-      pool->LockMutex();
-
-      if (!pool->IsStopped())
-      {
-        pool->WaitCondition();
-      }
-
-      if (!pool->IsStopped())
-      {
-        task = pool->NextTask();
-        assigned = true;
-      }
-
-      pool->UnlockMutex();
-
-      if (!pool->IsStopped() && assigned)
-      {
-        task();
-        assigned = false;
-      }
-    }
-
-    SDL_Log("[Thread #%lu] Finishing...", id);
+    pool->Process(id);
 
     return 0;
   }
 
-  ThreadPool::ThreadPool(int p_ThreadCount) : ThreadSafe()
+  ThreadPool::ThreadPool(int p_ThreadCount)
   {
     int maximumThreadCount = SDL_GetCPUCount();
 
@@ -73,10 +43,10 @@ namespace HTP
 
   ThreadPool::~ThreadPool()
   {
-    LockMutex();
+    m_Mutex.Lock();
     m_IsStopped = true;
-    BroadcastCondition();
-    UnlockMutex();
+    m_Condition.Broadcast();
+    m_Mutex.Unlock();
 
     for (SDL_Thread* thread : m_Threads)
     {
@@ -96,8 +66,38 @@ namespace HTP
     return m_ThreadCount;
   }
 
-  std::function<void()> ThreadPool::NextTask()
+  void ThreadPool::Process(unsigned long p_ThreadID)
   {
-    return m_Tasks.Pop();
+      SDL_Log("[Thread #%lu] Starting...", p_ThreadID);
+
+      bool assigned = false;
+
+      while (!IsStopped())
+      {
+        std::function<void()> task;
+
+        m_Mutex.Lock();
+
+        if (!IsStopped())
+        {
+          m_Condition.Wait(&m_Mutex);
+        }
+
+        if (!IsStopped())
+        {
+          task = m_Tasks.Pop();
+          assigned = true;
+        }
+
+        m_Mutex.Unlock();
+
+        if (!IsStopped() && assigned)
+        {
+          task();
+          assigned = false;
+        }
+      }
+
+      SDL_Log("[Thread #%lu] Finishing...", p_ThreadID);
   }
 }

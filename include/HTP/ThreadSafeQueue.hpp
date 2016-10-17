@@ -4,12 +4,13 @@
 #define __HTP_THREADSAFEQUEUE_HPP__
 
 // HTP Includes
+#include <HTP/Condition.hpp>
+#include <HTP/Mutex.hpp>
 #include <HTP/Queue.hpp>
-#include <HTP/ThreadSafe.hpp>
 
 namespace HTP
 {
-  template<typename T> class ThreadSafeQueue : public Queue<T>, public ThreadSafe
+  template<typename T> class ThreadSafeQueue : public Queue<T>
   {
     public:
       ThreadSafeQueue();
@@ -20,6 +21,10 @@ namespace HTP
 
       void Push(T p_Data) override;
       T Pop() override;
+
+    private:
+      Mutex m_Mutex;
+      Condition m_Condition;
   };
 }
 

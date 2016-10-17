@@ -7,7 +7,7 @@
 
 namespace HTP
 {
-  template<typename T> ThreadSafeQueue<T>::ThreadSafeQueue() : Queue<T>(), ThreadSafe()
+  template<typename T> ThreadSafeQueue<T>::ThreadSafeQueue() : Queue<T>()
   {
   }
 
@@ -17,39 +17,39 @@ namespace HTP
 
   template<typename T> bool ThreadSafeQueue<T>::IsEmpty()
   {
-    LockMutex();
+    m_Mutex.Lock();
     bool isEmpty = Queue<T>::IsEmpty();
-    UnlockMutex();
+    m_Mutex.Unlock();
 
     return isEmpty;
   }
 
   template<typename T> int ThreadSafeQueue<T>::GetSize()
   {
-    LockMutex();
+    m_Mutex.Lock();
     int size = Queue<T>::GetSize();
-    UnlockMutex();
+    m_Mutex.Unlock();
 
     return size;
   }
 
   template<typename T> void ThreadSafeQueue<T>::Push(T p_Data)
   {
-    LockMutex();
+    m_Mutex.Lock();
     Queue<T>::Push(p_Data);
-    SignalCondition();
-    UnlockMutex();
+    m_Condition.Signal();
+    m_Mutex.Unlock();
   }
 
   template<typename T> T ThreadSafeQueue<T>::Pop()
   {
-    LockMutex();
+    m_Mutex.Lock();
     while(IsEmpty())
     {
-      WaitCondition();
+      m_Condition.Wait(&m_Mutex);
     }
     T data = Queue<T>::Pop();
-    UnlockMutex();
+    m_Mutex.Unlock();
 
     return data;
   }
