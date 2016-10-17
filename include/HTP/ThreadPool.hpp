@@ -1,7 +1,7 @@
 // ThreadPool.hpp
 
-#ifndef __HTP_THREADPOOL__
-#define __HTP_THREADPOOL__
+#ifndef __HTP_THREADPOOL_HPP__
+#define __HTP_THREADPOOL_HPP__
 
 // HTP Includes
 #include <HTP/ThreadSafeQueue.hpp>

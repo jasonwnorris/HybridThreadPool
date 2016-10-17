@@ -3,7 +3,7 @@
 // HTP Includes
 #include <HTP/ThreadSafeQueue.hpp>
 
-#ifdef __HTP_THREADSAFEQUEUE__
+#ifdef __HTP_THREADSAFEQUEUE_HPP__
 
 namespace HTP
 {

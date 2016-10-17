@@ -3,7 +3,7 @@
 // HTP Includes
 #include <HTP/Queue.hpp>
 
-#ifdef __HTP_QUEUE__
+#ifdef __HTP_QUEUE_HPP__
 
 namespace HTP
 {

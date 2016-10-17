@@ -3,7 +3,7 @@
 // HTP Includes
 #include <HTP/ThreadPool.hpp>
 
-#ifdef __HTP_THREADPOOL__
+#ifdef __HTP_THREADPOOL_HPP__
 
 namespace HTP
 {

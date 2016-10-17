@@ -1,7 +1,7 @@
 // Queue.hpp
 
-#ifndef __HTP_QUEUE__
-#define __HTP_QUEUE__
+#ifndef __HTP_QUEUE_HPP__
+#define __HTP_QUEUE_HPP__
 
 namespace HTP
 {

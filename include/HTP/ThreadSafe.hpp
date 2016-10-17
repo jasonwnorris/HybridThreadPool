@@ -1,7 +1,7 @@
 // ThreadSafeQueue.hpp
 
-#ifndef __HTP_THREADSAFE__
-#define __HTP_THREADSAFE__
+#ifndef __HTP_THREADSAFE_HPP__
+#define __HTP_THREADSAFE_HPP__
 
 // SDL2 Includes
 #include <SDL2/SDL_thread.h>

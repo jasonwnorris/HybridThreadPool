@@ -1,7 +1,7 @@
 // ThreadSafeQueue.hpp
 
-#ifndef __HTP_THREADSAFEQUEUE__
-#define __HTP_THREADSAFEQUEUE__
+#ifndef __HTP_THREADSAFEQUEUE_HPP__
+#define __HTP_THREADSAFEQUEUE_HPP__
 
 // HTP Includes
 #include <HTP/Queue.hpp>
