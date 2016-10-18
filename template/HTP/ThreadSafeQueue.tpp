@@ -44,7 +44,7 @@ namespace HTP
   template<typename T> T ThreadSafeQueue<T>::Pop()
   {
     m_Mutex.Lock();
-    while(IsEmpty())
+    while (IsEmpty())
     {
       m_Condition.Wait(&m_Mutex);
     }
