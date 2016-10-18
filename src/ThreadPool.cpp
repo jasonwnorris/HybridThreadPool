@@ -43,10 +43,8 @@ namespace HTP
 
   ThreadPool::~ThreadPool()
   {
-    m_Mutex.Lock();
     m_IsStopped = true;
-    m_Condition.Broadcast();
-    m_Mutex.Unlock();
+    m_Semaphore.Increment(m_ThreadCount);
 
     for (SDL_Thread* thread : m_Threads)
     {
@@ -70,31 +68,14 @@ namespace HTP
   {
       SDL_Log("[Thread #%lu] Starting...", p_ThreadID);
 
-      bool assigned = false;
-
       while (!IsStopped())
       {
-        std::function<void()> task;
-
-        m_Mutex.Lock();
+        m_Semaphore.Wait();
 
         if (!IsStopped())
         {
-          m_Condition.Wait(&m_Mutex);
-        }
-
-        if (!IsStopped())
-        {
-          task = m_Tasks.Pop();
-          assigned = true;
-        }
-
-        m_Mutex.Unlock();
-
-        if (!IsStopped() && assigned)
-        {
+          std::function<void()> task = m_Tasks.Pop();
           task();
-          assigned = false;
         }
       }
 

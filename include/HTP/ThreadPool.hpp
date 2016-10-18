@@ -4,10 +4,10 @@
 #define __HTP_THREADPOOL_HPP__
 
 // HTP Includes
+#include <HTP/Semaphore.hpp>
 #include <HTP/ThreadSafeQueue.hpp>
 // SDL2 Includes
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_thread.h>
 // STL Includes
 #include <future>
 #include <functional>
@@ -33,8 +33,7 @@ namespace HTP
       void Process(unsigned long p_ThreadID);
 
     private:
-      Mutex m_Mutex;
-      Condition m_Condition;
+      Semaphore m_Semaphore;
       bool m_IsStopped;
       int m_ThreadCount;
       std::vector<SDL_Thread*> m_Threads;
